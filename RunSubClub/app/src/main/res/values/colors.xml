@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#686868</color>
+    <color name="colorPrimaryDark">#3399ff</color>
+    <color name="colorAccent">#00e600</color>
+    <color name="bottom_navigation_background">#595959</color>
+    <color name="unselected_item">#b3b3b3</color>
+    <color name="app_blue">#3399ff</color>
+    <color name="app_green">#00e600</color>
+</resources>
+

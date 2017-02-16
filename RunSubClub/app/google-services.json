@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "501380598562",
+    "firebase_url": "https://coreyrunsubclub.firebaseio.com",
+    "project_id": "coreyrunsubclub",
+    "storage_bucket": "coreyrunsubclub.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501380598562:android:1d18e9a26b5ddfbe",
+        "android_client_info": {
+          "package_name": "com.coreyjames.runsubclub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "501380598562-3g2h8trkicjvgfvrqg1f7iga3ev8sejn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.coreyjames.runsubclub",
+            "certificate_hash": "E9AF04F3FDEBCE3DFEED88E60DA1929A65726997"
+          }
+        },
+        {
+          "client_id": "501380598562-76k1psp8pn1bbq6hldt86eb0o8ejnmk3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM9ZjxhHrI989s6g9QK1SM7dYG_5snIlk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "501380598562-76k1psp8pn1bbq6hldt86eb0o8ejnmk3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
