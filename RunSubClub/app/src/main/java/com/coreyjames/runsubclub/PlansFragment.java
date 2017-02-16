@@ -78,7 +78,7 @@ public class PlansFragment extends Fragment implements IabBroadcastListener,
 
     // SKUs for our products: the premium upgrade (non-consumable) and gas (consumable)
     static final String SKU_PREMIUM = "premium";
-    static final String SKU_GAS = "gas";
+    static final String SKU_NEW_PLAN = "newplan";
 
     // SKU for our subscription (infinite gas)
     static final String SKU_INFINITE_GAS_MONTHLY = "infinite_gas_monthly";
@@ -424,30 +424,38 @@ public class PlansFragment extends Fragment implements IabBroadcastListener,
      * Prompt the user to confirm that they want to load the plan
      */
     private void confirmLoadPlanDiaglog(final int position) {
-        // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
-        builder.setMessage(R.string.confirm_load_plan);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "OK" button, so load plan.
-                confirmPlanLoad(position);
-                updateCurrentPlanTitleDialog(position);
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Cancel" button, so dismiss the dialog
-                // and continue editing the pet.
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-        });
+        // User wants to buy the plan so kick off google play bull shit
+        Boolean didBuy;
+        didBuy = buyNewPlanGooglePlay();
 
-        // Create and show the AlertDialog
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+        if (didBuy == true) {
+
+            // Create an AlertDialog.Builder and set the message, and click listeners
+            // for the postivie and negative buttons on the dialog.
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+            builder.setMessage(R.string.confirm_load_plan);
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                    // User clicked the "OK" button, so load plan.
+                    confirmPlanLoad(position);
+                    updateCurrentPlanTitleDialog(position);
+                }
+            });
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User clicked the "Cancel" button, so dismiss the dialog
+                    // and continue editing the pet.
+                    if (dialog != null) {
+                        dialog.dismiss();
+                    }
+                }
+            });
+
+            // Create and show the AlertDialog
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
     }
 
     private void updateCurrentPlanTitleDialog(final int position) {
@@ -557,11 +565,11 @@ public class PlansFragment extends Fragment implements IabBroadcastListener,
             if (mSubscribedToInfiniteGas) mTank = TANK_MAX;
 
             // Check for gas delivery -- if we own gas, we should fill up the tank immediately
-            Purchase gasPurchase = inventory.getPurchase(SKU_GAS);
+            Purchase gasPurchase = inventory.getPurchase(SKU_NEW_PLAN);
             if (gasPurchase != null && verifyDeveloperPayload(gasPurchase)) {
                 Log.d("Yo!", "We have gas. Consuming it.");
                 try {
-                    mHelper.consumeAsync(inventory.getPurchase(SKU_GAS), mConsumeFinishedListener);
+                    mHelper.consumeAsync(inventory.getPurchase(SKU_NEW_PLAN), mConsumeFinishedListener);
                 } catch (IabAsyncInProgressException e) {
                     complain("Error consuming gas. Another async operation in progress.");
                 }
@@ -638,4 +646,87 @@ public class PlansFragment extends Fragment implements IabBroadcastListener,
     public void receivedBroadcast() {
 
     }
+
+    public Boolean buyNewPlanGooglePlay() {
+        // launch the gas purchase UI flow.
+        // We will be notified of completion via mPurchaseFinishedListener
+        setWaitScreen(true);
+        Log.d("Yo!", "Launching purchase flow for gas.");
+
+        /* TODO: for security, generate your payload here for verification. See the comments on
+         *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
+         *        an empty string, but on a production app you should carefully generate this. */
+        String payload = "";
+
+        try {
+            mHelper.launchPurchaseFlow(getActivity(), SKU_NEW_PLAN, RC_REQUEST,
+                    mPurchaseFinishedListener, payload);
+            return true;
+        } catch (IabAsyncInProgressException e) {
+            complain("Error launching purchase flow. Another async operation in progress.");
+            setWaitScreen(false);
+            return false;
+        }
+    }
+
+    // Enables or disables the "please wait" screen.
+    void setWaitScreen(boolean set) {
+        getActivity().findViewById(R.id.trainingPlanLibraryListView).setVisibility(set ? View.GONE : View.VISIBLE);
+        getActivity().findViewById(R.id.screen_wait).setVisibility(set ? View.VISIBLE : View.GONE);
+    }
+
+    // Callback for when a purchase is finished
+    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+            Log.d("Yo!", "Purchase finished: " + result + ", purchase: " + purchase);
+
+            // if we were disposed of in the meantime, quit.
+            if (mHelper == null) return;
+
+            if (result.isFailure()) {
+                complain("Error purchasing: " + result);
+                setWaitScreen(false);
+                return;
+            }
+            if (!verifyDeveloperPayload(purchase)) {
+                complain("Error purchasing. Authenticity verification failed.");
+                setWaitScreen(false);
+                return;
+            }
+
+            Log.d("Yo!", "Purchase successful.");
+
+            if (purchase.getSku().equals(SKU_NEW_PLAN)) {
+                // bought 1/4 tank of gas. So consume it.
+                Log.d("Yo!", "Purchase is gas. Starting gas consumption.");
+                try {
+                    mHelper.consumeAsync(purchase, mConsumeFinishedListener);
+                } catch (IabAsyncInProgressException e) {
+                    complain("Error consuming gas. Another async operation in progress.");
+                    setWaitScreen(false);
+                    return;
+                }
+            }
+            else if (purchase.getSku().equals(SKU_PREMIUM)) {
+                // bought the premium upgrade!
+                Log.d("Yo!", "Purchase is premium upgrade. Congratulating user.");
+                alert("Thank you for upgrading to premium!");
+                mIsPremium = true;
+//                updateUi();
+                setWaitScreen(false);
+            }
+            else if (purchase.getSku().equals(SKU_INFINITE_GAS_MONTHLY)
+                    || purchase.getSku().equals(SKU_INFINITE_GAS_YEARLY)) {
+                // bought the infinite gas subscription
+                Log.d("Yo!", "Infinite gas subscription purchased.");
+                alert("Thank you for subscribing to infinite gas!");
+                mSubscribedToInfiniteGas = true;
+                mAutoRenewEnabled = purchase.isAutoRenewing();
+                mInfiniteGasSku = purchase.getSku();
+                mTank = TANK_MAX;
+//                updateUi();
+                setWaitScreen(false);
+            }
+        }
+    };
 }

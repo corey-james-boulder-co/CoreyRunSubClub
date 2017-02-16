@@ -43,4 +43,5 @@
     <string name="plan_loaded_confirmation">The plan has been loaded to your account.</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="content_description_app_loading_image">App loading image</string>
 </resources>
