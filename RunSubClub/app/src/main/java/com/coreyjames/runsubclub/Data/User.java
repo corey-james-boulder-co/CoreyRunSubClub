@@ -34,7 +34,7 @@ public class User {
         Map<String, Object> encoding = (Map<String, Object>) json;
         String uid = (String) encoding.get("uid");
         Profile profile = Profile.decode(encoding.get("profile"));
-        PlanType activePlanType = PlanType.decode((String) encoding.get("activePlan"));
+        PlanType activePlanType = PlanType.decode(encoding.get("activePlanType"));
         Map<PlanType, Plan> plans = decodePlans(encoding.get("plans"));
         if (uid != null && profile != null && activePlanType != null && plans != null) {
             return new User(uid, plans, activePlanType, profile);

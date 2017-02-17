@@ -287,6 +287,11 @@ public class PlansFragment extends Fragment implements IabBroadcastListener,
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
+                        Boolean didBuy = null;
+                        if (position == 1) {
+                            didBuy = buyNewPlanGooglePlay();
+                        }
+
                         final FirebaseDatabase database = FirebaseDatabase.getInstance();
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         final String userId = user.getUid();
@@ -351,11 +356,14 @@ public class PlansFragment extends Fragment implements IabBroadcastListener,
                         ON CLICK NO JUST DISMISS THE MESSAGES
                          */
 
-                        confirmLoadPlanDiaglog(position);
+                        if (position == 1 && didBuy == true) {
+                            confirmLoadPlanDiaglog(position);
+                        } else if (position == 0) {
+                            confirmLoadPlanDiaglog(position);
+                        }
 
 
                     }
-
                 });
 
     }
@@ -424,11 +432,6 @@ public class PlansFragment extends Fragment implements IabBroadcastListener,
      * Prompt the user to confirm that they want to load the plan
      */
     private void confirmLoadPlanDiaglog(final int position) {
-        // User wants to buy the plan so kick off google play bull shit
-        Boolean didBuy;
-        didBuy = buyNewPlanGooglePlay();
-
-        if (didBuy == true) {
 
             // Create an AlertDialog.Builder and set the message, and click listeners
             // for the postivie and negative buttons on the dialog.
@@ -455,7 +458,6 @@ public class PlansFragment extends Fragment implements IabBroadcastListener,
             // Create and show the AlertDialog
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
-        }
     }
 
     private void updateCurrentPlanTitleDialog(final int position) {

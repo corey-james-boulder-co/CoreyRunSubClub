@@ -23,8 +23,9 @@ public enum PlanType {
         return "";
     }
 
-    public static PlanType decode(String encoding){
-        switch (encoding) {
+    public static PlanType decode(Object json){
+        String planType = (String) json;
+        switch (planType) {
             case "basic": return BASIC;
             case "foundation": return FOUNDATION;
             case "beginner": return BEGINNER;
