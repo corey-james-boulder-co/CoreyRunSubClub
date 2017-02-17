@@ -38,6 +38,9 @@ android {
             renderscriptDebuggable false
         }
     }
+    compileOptions {
+        sourceCompatibility 1.8
+    }
 }
 //productFlavors {
 //}
