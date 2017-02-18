@@ -12,27 +12,39 @@ public enum PlanType {
     INTERMEDIATE,
     ADVANCED;
 
-    public String encode(){
+    public String encode() {
         switch (this) {
-            case BASIC: return "basic";
-            case FOUNDATION: return "foundation";
-            case BEGINNER: return "beginner";
-            case INTERMEDIATE: return "intermediate";
-            case ADVANCED: return "advanced";
+            case BASIC:
+                return "basic";
+            case FOUNDATION:
+                return "foundation";
+            case BEGINNER:
+                return "beginner";
+            case INTERMEDIATE:
+                return "intermediate";
+            case ADVANCED:
+                return "advanced";
         }
         return "";
     }
 
-    public static PlanType decode(Object json){
+    public static PlanType decode(Object json) {
         String planType = (String) json;
-        switch (planType) {
-            case "basic": return BASIC;
-            case "foundation": return FOUNDATION;
-            case "beginner": return BEGINNER;
-            case "intermediate": return INTERMEDIATE;
-            case "advanced": return ADVANCED;
+        if (planType != null) {
+            switch (planType) {
+                case "basic":
+                    return BASIC;
+                case "foundation":
+                    return FOUNDATION;
+                case "beginner":
+                    return BEGINNER;
+                case "intermediate":
+                    return INTERMEDIATE;
+                case "advanced":
+                    return ADVANCED;
+            }
         }
-        return BASIC;
+        return null;
     }
 
 }

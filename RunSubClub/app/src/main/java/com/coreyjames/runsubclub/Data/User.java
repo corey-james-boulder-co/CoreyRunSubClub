@@ -32,23 +32,28 @@ public class User {
 
     public static User decode(Object json){
         Map<String, Object> encoding = (Map<String, Object>) json;
-        String uid = (String) encoding.get("uid");
-        Profile profile = Profile.decode(encoding.get("profile"));
-        PlanType activePlanType = PlanType.decode(encoding.get("activePlanType"));
-        Map<PlanType, Plan> plans = decodePlans(encoding.get("plans"));
-        if (uid != null && profile != null && activePlanType != null && plans != null) {
-            return new User(uid, plans, activePlanType, profile);
+        if (encoding != null) {
+            String uid = (String) encoding.get("uid");
+            Profile profile = Profile.decode(encoding.get("profile"));
+            PlanType activePlanType = PlanType.decode(encoding.get("activePlanType"));
+            Map<PlanType, Plan> plans = decodePlans(encoding.get("plans"));
+            if (uid != null && profile != null && activePlanType != null && plans != null) {
+                return new User(uid, plans, activePlanType, profile);
+            }
         }
         return null;
     }
 
     private static Map<PlanType, Plan> decodePlans(Object json){
         Map<String, Object> encoding = (Map<String, Object>) json;
-        Map<PlanType, Plan> plans = new HashMap<>();
-        for (Map.Entry<String,Object> entry : encoding.entrySet()) {
-            plans.put(PlanType.decode(entry.getKey()), Plan.decode(entry.getValue()));
+        if (encoding != null) {
+            Map<PlanType, Plan> plans = new HashMap<>();
+            for (Map.Entry<String,Object> entry : encoding.entrySet()) {
+                plans.put(PlanType.decode(entry.getKey()), Plan.decode(entry.getValue()));
+            }
+            return plans;
         }
-        return plans;
+        return null;
     }
 
     private Map<String, Object> encodePlans(){

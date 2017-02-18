@@ -24,14 +24,18 @@ public class Profile {
         return encoding;
     }
 
-    public static Profile decode(Object json){
+    public static Profile decode(Object json) {
         Map<String, Object> encoding = (Map<String, Object>) json;
-        String name = (String) encoding.get("name");
-        Boolean hasOnboarded = (Boolean) encoding.get("hasOnboarded");
-        if (name != null && hasOnboarded != null) {
-            return new Profile(name, hasOnboarded);
+        if (encoding != null) {
+            String name = (String) encoding.get("name");
+            Boolean hasOnboarded = (Boolean) encoding.get("hasOnboarded");
+            if (name != null && hasOnboarded != null) {
+                return new Profile(name, hasOnboarded);
+            }
+
         }
         return null;
     }
+
 
 }
