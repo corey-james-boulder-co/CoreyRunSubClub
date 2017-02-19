@@ -2,10 +2,12 @@ package com.coreyjames.runsubclub;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -75,6 +77,13 @@ public class CalendarFragment extends Fragment {
 
         View myCalendarView = inflater.inflate(R.layout.fragment_calendar, container, false);
 
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                getActivity().findViewById(R.id.bottom_navigation);
+
+        MenuItem item = bottomNavigationView.getMenu().getItem(0);
+
+        item.setChecked(true);
+
         initializeFirebaseComponents();
 
         initializeFirebaseDB();
@@ -127,12 +136,15 @@ public class CalendarFragment extends Fragment {
 
                 Bundle bundle = new Bundle();
                 String dbRef = neat;
+                String fragmentTag = "runFragment";
 
                 bundle.putString("runKey", dbRef);
                 fragment = new RunFragment();
                 fragment.setArguments(bundle);
                 final FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.main_container, fragment, "RunView").addToBackStack( "tag" ).commit();
+                transaction.replace(R.id.main_container, fragment, "RunView").addToBackStack(fragmentTag).commit();
+                System.out.println("Hello Rudy " + fragmentTag);
+
 
             }
         });

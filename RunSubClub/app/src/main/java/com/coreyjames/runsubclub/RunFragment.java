@@ -2,11 +2,13 @@ package com.coreyjames.runsubclub;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -100,6 +102,13 @@ public class RunFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View myRunWoView = inflater.inflate(R.layout.fragment_run, container, false);
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                getActivity().findViewById(R.id.bottom_navigation);
+
+        MenuItem item = bottomNavigationView.getMenu().getItem(1);
+
+        item.setChecked(true);
 
         // Set app bar title
         getActivity().setTitle(getString(R.string.run_wo_activity_title_run_wo));
@@ -409,7 +418,8 @@ public class RunFragment extends Fragment {
                         public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer player, boolean wasRestored) {
 
                             if (!wasRestored) {
-                                player.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
+                                player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT
+                                );
 
                                 mFirstVideoDataBaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override

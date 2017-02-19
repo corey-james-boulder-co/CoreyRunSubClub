@@ -10,7 +10,7 @@ public enum FirebaseKey {
 
     public String pathString() {
         switch (this) {
-            case DAY: return "day";
+            case DAY: return "PATH_TO_DAY_NODE";
         }
         return "";
     }

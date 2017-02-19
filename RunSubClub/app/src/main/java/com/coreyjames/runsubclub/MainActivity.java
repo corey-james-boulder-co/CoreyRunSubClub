@@ -65,10 +65,12 @@ public class MainActivity extends AppCompatActivity {
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem item) {
+                        String fragmentTag = "default";
                         switch (item.getItemId()) {
                             case R.id.action_calendar:
 
                                 fragment = new CalendarFragment();
+                                fragmentTag = "calendarFragment";
 
                                 break;
                             case R.id.action_run:
@@ -98,18 +100,23 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
 
+                                fragmentTag = "runFragment";
+
                                 break;
 
                             case R.id.action_strength:
 
                                 fragment = new StrengthFragment();
+                                fragmentTag = "strengthFragment";
                                 break;
                             case R.id.action_plans:
                                 fragment = new PlansFragment();
+                                fragmentTag = "plansFragment";
                                 break;
                         }
                         final FragmentTransaction transaction = fragmentManager.beginTransaction();
-                        transaction.replace(R.id.main_container, fragment).addToBackStack( "tag" ).commit();
+                        transaction.replace(R.id.main_container, fragment).addToBackStack( fragmentTag ).commit();
+                        System.out.println("Hello Rudy " + fragmentTag);
                         return true;
                     }
                 });
@@ -121,7 +128,92 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
+//        String id = getApplicationContext().getTag();
+//
+//        List list = fragmentManager.();
+//
+//        getSupportFragmentManager().tag
+//
+//        Context ok = getApplication().getApplicationContext();
+//
+//        Context lilGuy = this.fragment.getT();
+//
+//        System.out.println("the lil guy tag is " + id);
+
+//        try {
+//            switch (pos) {
+//                case 0: // Means Main Activity : Do Default action
+//                    super.onBackPressed();
+//                    break;
+//                case 1:
+//                case 2:
+//                case 3://Other than main tab open previous positioned tab.
+//                    viewPager.setCurrentItem(pos, true);
+//                    break;
+//            }
+//        } catch (Exception e) {
+//            super.onBackPressed();
+//        }
+
+
+//
+//        int index = getFragmentManager().getBackStackEntryCount() - 1;
+//        FragmentManager.BackStackEntry backEntry = (FragmentManager.BackStackEntry) getFragmentManager().getBackStackEntryAt(index);
+//        String tag = backEntry.getName();
+//        android.app.Fragment fragment = getFragmentManager().findFragmentByTag(tag);
+//
+//
+//        System.out.println("HELLO RUDY " + fragment);
+//
+//        List fragList = getSupportFragmentManager().getFragments();
+//
+//        int listSize = fragList.size();
+//
+//        if (listSize > 1) {
+//
+//            int fragGet = listSize - 2;
+//
+//            Fragment fragment = (Fragment) fragList.get(fragGet);
+//
+//            String fragName = fragment.toString();
+//
+//            String[] seperated = fragName.split("Fragment");
+//
+//            int i = 0;
+//
+//            if (seperated[0] != null) {
+//                switch (seperated[0]) {
+//                    case "Calendar": i = 0;
+//                        break;
+//                    case "Run": i = 1;
+//                        break;
+//                    case "Strength": i = 2;
+//                        break;
+//                    case "Plans": i = 3;
+//                        break;
+//                }
+//                BottomNavigationView bottomNavigationView = (BottomNavigationView)
+//                        findViewById(R.id.bottom_navigation);
+//
+//                MenuItem item = bottomNavigationView.getMenu().getItem(i);
+//
+//                item.setChecked(true);
+//
+//                System.out.println("BILLY BILLY BILLY .. The current frag list is" + fragList + " this list contains this many: "
+//                        + listSize + " frag NAME is " + fragName  + " what is i "
+//                        + i + " the seperated value is " + seperated[0] +
+//                        " what is the item?? " + item);
+//            }
+//
+//        }
+
+
         super.onBackPressed();
+
+//        getSupportFragmentManager().popBackStack();
+
+
     }
 }
 

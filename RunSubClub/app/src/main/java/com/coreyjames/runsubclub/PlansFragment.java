@@ -6,9 +6,11 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -162,6 +164,13 @@ public class PlansFragment extends Fragment implements IabBroadcastListener,
 
 
         View mTrainigPlanLibraryView = inflater.inflate(R.layout.fragment_plans, container, false);
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                getActivity().findViewById(R.id.bottom_navigation);
+
+        MenuItem item = bottomNavigationView.getMenu().getItem(3);
+
+        item.setChecked(true);
 
         mTrainingPlanLibraryListView = (ListView) mTrainigPlanLibraryView.findViewById(R.id.trainingPlanLibraryListView);
 
@@ -356,10 +365,14 @@ public class PlansFragment extends Fragment implements IabBroadcastListener,
                         ON CLICK NO JUST DISMISS THE MESSAGES
                          */
 
-                        if (position == 1 && didBuy == true) {
-                            confirmLoadPlanDiaglog(position);
+                        if (position == 1 && didBuy != true) {
+                            return;
                         } else if (position == 0) {
                             confirmLoadPlanDiaglog(position);
+                        } else if (position == 1 && didBuy == true){
+                            confirmLoadPlanDiaglog(position);
+                        } else {
+                            return;
                         }
 
 
