@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -69,6 +70,9 @@ public class RunFragment extends Fragment {
     private DatabaseReference mCompletionStatusReferenceUser;
     private DatabaseReference mCompletionStatusIntReference;
     private DatabaseReference mCompletionStatusIntReferenceUser;
+
+    private Fragment fragment;
+    private FragmentManager fragmentManager;
 
 
 
@@ -152,7 +156,7 @@ public class RunFragment extends Fragment {
 
         initializeDatabase(dbRefTrainingDay);
 
-        doYouTubeOrDoImage(dbRefTrainingDay);
+        doYouTubeOrDoImage(dbRefTrainingDay, myRunWoView);
 
         initializeListViewAdapter();
 
@@ -395,7 +399,7 @@ public class RunFragment extends Fragment {
         });
     }
 
-    public void doYouTubeOrDoImage (final String childOne) {
+    public void doYouTubeOrDoImage (final String childOne, View runView) {
 
         //First Let's Check if there are videos .. If there are videos then set up YouTube .. If not just show Image
         mFirstVideoDataBaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -418,8 +422,50 @@ public class RunFragment extends Fragment {
                         public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer player, boolean wasRestored) {
 
                             if (!wasRestored) {
-                                player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT
-                                );
+                                player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+
+                                player.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
+
+
+                                    @Override
+                                    public void onFullscreen(boolean b) {
+
+                                        if (b == true) {
+
+                                            getView().setFocusableInTouchMode(true);
+                                            getView().requestFocus();
+                                            getView().setOnKeyListener( new View.OnKeyListener() {
+                                                @Override
+                                                public boolean onKey( View v, int keyCode, KeyEvent event )
+                                                {
+                                                    if( keyCode == KeyEvent.KEYCODE_BACK )
+                                                    {
+                                                        player.setFullscreen(false);
+                                                        return true;
+                                                    }
+                                                    return false;
+                                                }
+                                            } );
+
+//                                            runView.setOnKeyListener(new View.OnKeyListener() {
+//
+//                                                @Override
+//                                                public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                                                    Log.i("tag", "keyCode: " + keyCode);
+//                                                    if( keyCode == KeyEvent.KEYCODE_BACK ) {
+//                                                        Log.i("tag", "onKey Back listener is working!!!");
+//                                                        player.setFullscreen(false);
+//                                                        return true;
+//                                                    } else {
+//                                                        return false;
+//                                                    }
+//                                                }
+//                                            });
+
+                                        }
+
+                                    }
+                                });
 
                                 mFirstVideoDataBaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -583,15 +629,39 @@ public class RunFragment extends Fragment {
 //
 //    });
 
+//    public void handleBackButton(View view) {
+//
+//
+//        myRunWoView.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                Log.i(tag, "keyCode: " + keyCode);
+//                if( keyCode == KeyEvent.KEYCODE_BACK ) {
+//                    Log.i(tag, "onKey Back listener is working!!!");
+//                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                    return true;
+//                } else {
+//                    return false;
+//                }
+//            }
+//        });
+//
+//    }
+//
+//
+//
+//    public boolean onKeyDown(int keyCode, KeyEvent event)
+//    {
+//        if(keyCode == KeyEvent.KEYCODE_BACK)
+//        {
+//
+//
+//            return true;
+//        }
+//        return false;
+//    }
 
 
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if(keyCode == KeyEvent.KEYCODE_BACK)
-        {
-
-            return true;
-        }
-        return false;
-    }
 }
+
+

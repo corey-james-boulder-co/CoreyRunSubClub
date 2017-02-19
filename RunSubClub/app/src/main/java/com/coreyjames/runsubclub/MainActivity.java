@@ -17,6 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private Fragment fragment;
@@ -166,8 +168,8 @@ public class MainActivity extends AppCompatActivity {
 //
 //        System.out.println("HELLO RUDY " + fragment);
 //
-//        List fragList = getSupportFragmentManager().getFragments();
-//
+        List fragList = getSupportFragmentManager().getFragments();
+
 //        int listSize = fragList.size();
 //
 //        if (listSize > 1) {
@@ -200,13 +202,23 @@ public class MainActivity extends AppCompatActivity {
 //
 //                item.setChecked(true);
 //
-//                System.out.println("BILLY BILLY BILLY .. The current frag list is" + fragList + " this list contains this many: "
-//                        + listSize + " frag NAME is " + fragName  + " what is i "
-//                        + i + " the seperated value is " + seperated[0] +
-//                        " what is the item?? " + item);
+//        + " this list contains this many: "
+//                + listSize + " frag NAME is " + fragName  + " what is i "
+//                + i + " the seperated value is " + seperated[0] +
+//                " what is the item?? " + item
+
+                System.out.println("BILLY BILLY BILLY .. The current frag list is" + fragList );
 //            }
 //
 //        }
+
+//        if (fullScreen){
+//            videoPlayer.setFullscreen(false);
+//        } else{
+//            super.onBackPressed();
+//        }
+
+
 
 
         super.onBackPressed();
@@ -215,5 +227,22 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+//    @Override
+//    public void onInitializationSuccess(YouTubePlayer.Provider provider,
+//                                        YouTubePlayer player, boolean wasRestored) {
+//        if (!wasRestored) {
+//            showPlayer();
+//            videoPlayer = player;
+//            videoPlayer.setOnFullscreenListener(new OnFullscreenListener() {
+//
+//                @Override
+//                public void onFullscreen(boolean _isFullScreen) {
+//                    fullScreen = _isFullScreen;
+//                }
+//            });
+//            videoPlayer.loadVideo(actualVideo.getVideoId());
+//        }
+//    }
 }
 

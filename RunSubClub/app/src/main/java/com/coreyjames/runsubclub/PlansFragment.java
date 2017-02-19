@@ -296,11 +296,6 @@ public class PlansFragment extends Fragment implements IabBroadcastListener,
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                        Boolean didBuy = null;
-                        if (position == 1) {
-                            didBuy = buyNewPlanGooglePlay();
-                        }
-
                         final FirebaseDatabase database = FirebaseDatabase.getInstance();
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         final String userId = user.getUid();
@@ -365,16 +360,17 @@ public class PlansFragment extends Fragment implements IabBroadcastListener,
                         ON CLICK NO JUST DISMISS THE MESSAGES
                          */
 
-                        if (position == 1 && didBuy != true) {
-                            return;
-                        } else if (position == 0) {
-                            confirmLoadPlanDiaglog(position);
-                        } else if (position == 1 && didBuy == true){
+                        if (position == 0) {
                             confirmLoadPlanDiaglog(position);
                         } else {
-                            return;
-                        }
+                            Boolean didBuy = buyNewPlanGooglePlay();
+                            if (didBuy!=true) {
+                                return;
+                            } else {
+                                confirmLoadPlanDiaglog(position);
+                            }
 
+                        }
 
                     }
                 });
