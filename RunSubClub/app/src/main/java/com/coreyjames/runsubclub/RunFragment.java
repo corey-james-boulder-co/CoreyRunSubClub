@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.coreyjames.runsubclub.Data.Session;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -40,8 +41,10 @@ import static com.coreyjames.runsubclub.R.drawable.star_big;
 public class RunFragment extends Fragment {
 
     public RunFragment() {
-
+        this.getArguments();
     }
+
+    Session session;
 
     private static final String API_KEY = "AIzaSyBCs4CMAzvVMiwVoGnKXW8kHq4rXhn6Vcw";
     public String VIDEO_ID;
@@ -162,7 +165,9 @@ public class RunFragment extends Fragment {
 
         initializeCompletionStatusDatabaseForUser(dbRefTrainingDay);
 
-        setSessionTypeTextView();
+//        mSessionTypeTextView.setText(session.s);
+
+
         setDurationTextView();
         setDescriptionTextView();
         setSessionTypeImageView();
@@ -254,27 +259,6 @@ public class RunFragment extends Fragment {
                 .child("users").child(user.getUid()).child("activePlan").child(childOne).child("completionStatus");
     }
 
-    public void setSessionTypeTextView() {
-        // In the database whenever any data is changed then the below code snipped is going to be executed.
-        mSessionTypeReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                // the changed value is going to be stored into the dataSnapshot
-                // to retrieve value from dataSnapshot we write
-
-                String value = (String) dataSnapshot.getValue();
-                mSessionTypeTextView.setText(value);
-                Log.wtf("THE VAULE IS ... ", value);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     public void setDurationTextView() {
         // In the database whenever any data is changed then the below code snipped is going to be executed.

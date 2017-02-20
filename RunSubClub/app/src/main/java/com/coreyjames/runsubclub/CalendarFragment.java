@@ -41,6 +41,7 @@ public class CalendarFragment extends Fragment {
 
 
     public CalendarFragment() {
+
     }
 
 
@@ -286,10 +287,6 @@ public class CalendarFragment extends Fragment {
                 .child(initializeUserID()).child("activePlan");
     }
 
-    public void initializeFirebaseGeneral() {
-        mMessagesDatabaseReferenceGeneral = mFirebaseDatabaseGeneral.getReference().child("users");
-    }
-
     public void initializePublicViews() {
         // Initialize references to views
         mProgressBar = (ProgressBar) getActivity().findViewById(R.id.progressBar);
@@ -310,7 +307,6 @@ public class CalendarFragment extends Fragment {
 
     public String initializeUserID() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        System.out.println("YO YO YO " + user.getUid());
         if (user == null) {
             onSignedOutCleanup();
             startActivityForResult(

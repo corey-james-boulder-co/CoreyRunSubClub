@@ -1,5 +1,6 @@
 package com.coreyjames.runsubclub;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
+import com.coreyjames.runsubclub.Data.FirebaseDataHandler;
+import com.coreyjames.runsubclub.Data.FirebaseHelper;
+import com.coreyjames.runsubclub.Data.FirebaseSerializable;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -17,26 +21,52 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import com.coreyjames.runsubclub.Data.User;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
 
     private Fragment fragment;
     private FragmentManager fragmentManager;
     private DatabaseReference mCompletionStatusReference;
     private DatabaseReference mCompletionStatusReferenceUser;
+    FirebaseSerializable firebaseSerializable;
+
+    // Define what we want here .. what we need to use in other fragments .. the variables
+    // It will be like we need all the gargbage for the calendar start there so it will be all the
+    // stuff for the static helper deal that helps to load the calendar .. just follow the trail
+    // EXAMPLE :
+    Boolean isCompleted;
+    String sessionType;
+    User user;
+    // ok?
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences prefs = getPreferences(0);
+        String uid = prefs.getString("uid", "");
+
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
+
+        firebaseHelper.readUser(uid, new FirebaseDataHandler() {
+            @Override
+            public void callback(DataSnapshot snapshot) {
+                user = User.decode(snapshot.getValue());
+            }
+        });
+
         // remove app bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         // hide the whole damn action bar
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
-
-
 
 
         fragmentManager = getSupportFragmentManager();
